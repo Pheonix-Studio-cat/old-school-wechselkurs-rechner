@@ -1,0 +1,458 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Wechselstube 1919–1923</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Spectral:ital,wght@0,400;0,600;1,400&family=Courier+Prime:wght@400;700&display=swap">
+<style>
+/* Layout: one narrow counter slip (form → receipt) on banknote paper, then the ledger and the notes on method. */
+:root {
+  --paper: #e9e8d8;      /* banknote paper, slightly green */
+  --slip: #f4f3e7;       /* the counter slip */
+  --ink: #1f2a2e;
+  --muted: #59645e;
+  --engrave: #2f5d50;    /* engraving green, the accent */
+  --stamp: #9b2f3a;      /* bank stamp red, for warnings and the total */
+  --line: #c4c3ad;
+  --bar: #9db3a6;
+  --font-display: "UnifrakturMaguntia", "Old English Text MT", Georgia, serif;
+  --font-body: "Spectral", Georgia, "Times New Roman", serif;
+  --font-figures: "Courier Prime", "Courier New", ui-monospace, monospace;
+  --step--1: 0.875rem; --step-0: 1rem; --step-1: 1.25rem; --step-2: 1.75rem; --step-3: 2.75rem;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #131917; --slip: #1a221f; --ink: #e3e1d0; --muted: #9ba69e;
+    --engrave: #86bfa8; --stamp: #e5848c; --line: #34403a; --bar: #4c6b5e; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #131917; --slip: #1a221f; --ink: #e3e1d0; --muted: #9ba69e;
+  --engrave: #86bfa8; --stamp: #e5848c; --line: #34403a; --bar: #4c6b5e; color-scheme: dark;
+}
+[hidden] { display: none !important; }
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--paper); color: var(--ink);
+  font-family: var(--font-body); font-size: var(--step-0); line-height: 1.55;
+}
+.wrap { max-width: 46rem; margin: 0 auto; padding-inline: 16px; padding-block: 1.5rem 3rem; display: grid; gap: 2rem; }
+
+/* Masthead */
+header.mast { position: relative; display: grid; gap: .25rem; padding-block: 1.25rem .5rem; text-align: left; }
+#rosette { position: absolute; right: -8px; top: -4px; width: 150px; height: 150px; pointer-events: none; opacity: .5; }
+.mast h1 { margin: 0; font-family: var(--font-display); font-weight: 400; font-size: var(--step-3); line-height: 1; color: var(--engrave); text-wrap: balance; position: relative; }
+.mast .sub { margin: 0; font-size: var(--step-1); position: relative; max-width: 30ch; text-wrap: balance; }
+.mast .lang { position: absolute; right: 0; top: 0; display: flex; gap: .25rem; z-index: 1; }
+.lang button { font: 700 var(--step--1) var(--font-figures); letter-spacing: .08em; background: transparent; color: var(--muted); border: 1px solid var(--line); padding: .2rem .5rem; cursor: pointer; }
+.lang button[aria-pressed="true"] { color: var(--paper); background: var(--engrave); border-color: var(--engrave); }
+
+/* The slip */
+.slip { background: var(--slip); border: 1px solid var(--line); outline: 1px solid var(--line); outline-offset: 4px; padding: 1.25rem; display: grid; gap: 1.25rem; }
+.slip h2, section h2 { margin: 0; font-size: var(--step--1); text-transform: uppercase; letter-spacing: .14em; font-weight: 600; color: var(--muted); }
+.fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.field { display: grid; gap: .3rem; min-width: 0; }
+.field.wide { grid-column: 1 / -1; }
+.field label { font-size: var(--step--1); color: var(--muted); }
+.amount-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .5rem; }
+input, select {
+  font: 400 var(--step-1) var(--font-figures); color: var(--ink); background: var(--paper);
+  border: 0; border-bottom: 2px solid var(--ink); border-radius: 0; padding: .4rem .3rem; width: 100%; min-width: 0;
+}
+select { font-family: var(--font-body); font-size: var(--step-0); padding-block: .55rem; }
+input:focus-visible, select:focus-visible, button:focus-visible, a:focus-visible { outline: 2px solid var(--engrave); outline-offset: 2px; }
+select:disabled { color: var(--muted); border-bottom-style: dotted; }
+.hint { margin: 0; font-size: var(--step--1); color: var(--muted); font-style: italic; }
+.examples { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; }
+.examples span { font-size: var(--step--1); color: var(--muted); }
+.examples button {
+  font: var(--step--1) var(--font-body); color: var(--engrave); background: transparent;
+  border: 1px dashed var(--engrave); padding: .25rem .6rem; cursor: pointer;
+}
+.examples button:hover { background: var(--paper); }
+
+/* Receipt */
+.receipt { border-top: 2px dashed var(--line); padding-top: 1.25rem; display: grid; gap: 1rem; }
+.total { display: grid; gap: .1rem; }
+.total .label { font-size: var(--step--1); color: var(--muted); }
+.total .value { font: 700 var(--step-2) var(--font-figures); color: var(--stamp); line-height: 1.15; overflow-wrap: anywhere; }
+.total .words { font-size: var(--step--1); color: var(--muted); }
+ol.steps { list-style: none; margin: 0; padding: 0; display: grid; gap: .55rem; font-variant-numeric: tabular-nums; }
+ol.steps li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .25rem 1rem; align-items: baseline; border-bottom: 1px dotted var(--line); padding-bottom: .45rem; }
+ol.steps .what { min-width: 0; }
+ol.steps .num { font-family: var(--font-figures); text-align: right; white-space: nowrap; }
+ol.steps .detail { grid-column: 1 / -1; font-size: var(--step--1); color: var(--muted); }
+.chip { display: inline-block; font: 700 .7rem var(--font-figures); letter-spacing: .06em; text-transform: uppercase; padding: .05rem .4rem; border: 1px solid currentColor; margin-left: .35rem; vertical-align: .1em; }
+.chip.source { color: var(--engrave); }
+.chip.interp, .chip.year, .chip.fixed { color: var(--muted); }
+.error { color: var(--stamp); font-weight: 600; margin: 0; }
+
+/* Ledger */
+section { display: grid; gap: .9rem; }
+section p { margin: 0; max-width: 65ch; }
+.ledger-wrap { overflow-x: auto; }
+table.ledger { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
+.ledger th { text-align: left; font-size: var(--step--1); color: var(--muted); font-weight: 400; border-bottom: 1px solid var(--ink); padding: .3rem .4rem; }
+.ledger td { border-bottom: 1px dotted var(--line); padding: .3rem .4rem; vertical-align: middle; }
+.ledger td:first-child { white-space: nowrap; }
+.ledger td.rate { font-family: var(--font-figures); text-align: right; white-space: nowrap; }
+.ledger td.barcell { width: 40%; min-width: 6rem; }
+.ledger .bar { height: .55rem; background: var(--bar); }
+.ledger tr.sel td { background: var(--paper); }
+.ledger tr.sel td:first-child { box-shadow: inset 3px 0 0 var(--stamp); }
+.ledger .note { color: var(--muted); font-size: var(--step--1); }
+dl.sources { margin: 0; display: grid; gap: .6rem; }
+dl.sources dt { font-weight: 600; }
+dl.sources dd { margin: 0; color: var(--muted); font-size: var(--step--1); }
+footer { font-size: var(--step--1); color: var(--muted); }
+footer a, section a { color: var(--engrave); }
+
+@media (max-width: 34rem) {
+  .fields { grid-template-columns: minmax(0, 1fr); }
+  .mast h1 { font-size: 2.2rem; }
+  #rosette { width: 110px; height: 110px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .total .value.flash { animation: stamp .35s ease-out; }
+  @keyframes stamp { from { transform: scale(1.06); opacity: .4; } to { transform: none; opacity: 1; } }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="mast">
+    <canvas id="rosette" width="300" height="300" aria-hidden="true"></canvas>
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" id="lang-en" data-lang="en" aria-pressed="true">EN</button>
+      <button type="button" id="lang-de" data-lang="de" aria-pressed="false">DE</button>
+    </div>
+    <h1 data-i18n="title">Wechselstube</h1>
+    <p class="sub" data-i18n="subtitle">Old money from 1919–1923, counted in today's currencies.</p>
+  </header>
+
+  <form class="slip" id="slip" autocomplete="off">
+    <h2 data-i18n="slipTitle">Exchange slip</h2>
+    <div class="fields">
+      <div class="field wide">
+        <label for="amount" data-i18n="amount">Amount</label>
+        <div class="amount-row">
+          <input id="amount" name="amount" type="number" inputmode="decimal" min="0" step="any" value="100">
+          <select id="mult" name="mult" aria-label="Multiplier">
+            <option value="1">× 1</option>
+            <option value="1e3" data-i18n="m3">thousand</option>
+            <option value="1e6" data-i18n="m6">million</option>
+            <option value="1e9" data-i18n="m9">billion (10⁹)</option>
+            <option value="1e12" data-i18n="m12">trillion (10¹²)</option>
+          </select>
+        </div>
+      </div>
+      <div class="field wide">
+        <label for="currency" data-i18n="currency">Old currency</label>
+        <select id="currency" name="currency"></select>
+        <p class="hint" id="currency-hint"></p>
+      </div>
+      <div class="field">
+        <label for="year" data-i18n="year">Year</label>
+        <select id="year" name="year"></select>
+      </div>
+      <div class="field">
+        <label for="month" data-i18n="month">Month</label>
+        <select id="month" name="month"></select>
+      </div>
+      <div class="field wide">
+        <label for="target" data-i18n="target">Today's currency</label>
+        <select id="target" name="target"></select>
+      </div>
+    </div>
+    <div class="examples" id="examples"><span data-i18n="tryThese">Try:</span></div>
+
+    <div class="receipt" aria-live="polite">
+      <div class="total">
+        <span class="label" id="total-label"></span>
+        <span class="value" id="total-value"></span>
+        <span class="words" id="total-words"></span>
+      </div>
+      <p class="error" id="error" hidden></p>
+      <ol class="steps" id="steps"></ol>
+    </div>
+  </form>
+
+  <section aria-labelledby="ledger-title">
+    <h2 id="ledger-title" data-i18n="ledgerTitle">Paper marks for one dollar</h2>
+    <p data-i18n="ledgerIntro">Berlin quotations. The bar is on a log scale: each step of the same length is the same multiple.</p>
+    <div class="ledger-wrap">
+      <table class="ledger">
+        <thead><tr><th data-i18n="colMonth">Month</th><th data-i18n="colRate" style="text-align:right">Marks per $</th><th></th></tr></thead>
+        <tbody id="ledger"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section aria-labelledby="method-title">
+    <h2 id="method-title" data-i18n="methodTitle">How the slip is worked out</h2>
+    <p data-i18n="method1">The old amount is first changed into US dollars at the rate of its time. Those dollars are brought forward with the US consumer price index to today's dollars, and then changed into the currency you chose at today's rate.</p>
+    <p data-i18n="method2">The dollar is the bridge because it stayed on gold the whole time and has one unbroken price index from 1913. The result is purchasing power measured in American prices, not in German ones.</p>
+    <p data-i18n="method3">Paper mark rates are quoted for particular months. Months in between are interpolated on a log scale and marked as such. In 1923 the mark could lose half its value within days, so any monthly figure is a rough guide. Other currencies use yearly averages.</p>
+    <dl class="sources" id="sources"></dl>
+  </section>
+
+  <footer>
+    <p data-i18n-html="footer">Source code and data: <a href="https://github.com/Pheonix-Studio-cat/old-school-wechselkurs-rechner">GitHub</a>. MIT licence.</p>
+  </footer>
+</div>
+
+<script type="module">
+import { CURRENCIES, YEARS, CPI, PAPERMARK_PER_USD, PAPERMARK_SOURCE, TODAY_FX, TARGETS } from './data.js';
+import { convert, currencyById } from './calc.js';
+
+const T = {
+  en: {
+    title: 'Wechselstube', subtitle: 'Old money from 1919–1923, counted in today’s currencies.',
+    slipTitle: 'Exchange slip', amount: 'Amount', currency: 'Old currency', year: 'Year', month: 'Month',
+    target: 'Today’s currency', tryThese: 'Try:', m3: 'thousand', m6: 'million', m9: 'billion (10⁹)', m12: 'trillion (10¹²)',
+    german: 'German currencies', world: 'Other currencies', annual: 'yearly average', fixedRate: 'fixed rate',
+    ledgerTitle: 'Paper marks for one dollar',
+    ledgerIntro: 'Berlin quotations. The bar is on a log scale: each step of the same length is the same multiple.',
+    colMonth: 'Month', colRate: 'Marks per $',
+    methodTitle: 'How the slip is worked out',
+    method1: 'The old amount is first changed into US dollars at the rate of its time. Those dollars are brought forward with the US consumer price index to today’s dollars, and then changed into the currency you chose at today’s rate.',
+    method2: 'The dollar is the bridge because it stayed on gold the whole time and has one unbroken price index from 1913. The result is purchasing power measured in American prices, not in German ones.',
+    method3: 'Paper mark rates are quoted for particular months. Months in between are interpolated on a log scale and marked as such. In 1923 the mark could lose half its value within days, so any monthly figure is a rough guide. Other currencies use yearly averages.',
+    footer: 'Source code and data: <a href="https://github.com/Pheonix-Studio-cat/old-school-wechselkurs-rechner">GitHub</a>. MIT licence.',
+    totalLabel: (a, c, d) => `${a} ${c} of ${d} is worth about`,
+    today: 'today',
+    s1: 'Rate at the time', s2: 'In US dollars then', s3: 'US prices since then', s4: 'In US dollars today', s5: 'Today’s rate',
+    d1: (r, c, when) => `${r} ${c} = 1 US dollar, ${when}`,
+    d1inv: (r, c, when) => `1 ${c} = ${r} US dollars, ${when}`,
+    d3: (y, a, b, lbl) => `Consumer price index ${a} in ${y}, ${b} in ${lbl}`,
+    d5: (r, code, date, live) => `1 US dollar = ${r} ${code}, ECB reference rate of ${date}${live ? ' (fetched just now)' : ''}`,
+    chipSource: 'source', chipInterp: 'interpolated', chipYear: 'yearly avg.', chipFixed: 'fixed',
+    interpBetween: (a, b) => `between the quotes for ${a} and ${b}`,
+    errAmount: 'Enter an amount of zero or more.',
+    errNotYet: (from) => `The Rentenmark was only issued from 15 November 1923. Choose ${from} or later.`,
+    srcPM: 'Paper mark', srcWorld: 'Other currencies, 1919–1923', srcCPI: 'US prices', srcFX: 'Today’s rates',
+    srcWorldText: 'Annual averages of daily New York rates from L. H. Officer, MeasuringWorth. Sterling:',
+    srcFXText: (d) => `ECB euro reference rates of ${d}. The page asks for newer ones when it can and keeps these otherwise.`,
+    words: ['', 'thousand', 'million', 'billion', 'trillion'], word1: ['', 'thousand', 'million', 'billion', 'trillion'],
+    ex: ['100 marks, Jan 1919', '1 trillion marks, Nov 1923', '1 Rentenmark, Dec 1923', '£1, 1920', '1 million marks, Aug 1923'],
+    nameOf: (c) => c.name.en, hintOf: (c) => c.hint?.en || '',
+  },
+  de: {
+    title: 'Wechselstube', subtitle: 'Altes Geld aus den Jahren 1919–1923, in heutige Währungen umgerechnet.',
+    slipTitle: 'Wechselzettel', amount: 'Betrag', currency: 'Alte Währung', year: 'Jahr', month: 'Monat',
+    target: 'Heutige Währung', tryThese: 'Beispiele:', m3: 'Tausend', m6: 'Millionen', m9: 'Milliarden (10⁹)', m12: 'Billionen (10¹²)',
+    german: 'Deutsche Währungen', world: 'Andere Währungen', annual: 'Jahresdurchschnitt', fixedRate: 'fester Kurs',
+    ledgerTitle: 'Papiermark für einen Dollar',
+    ledgerIntro: 'Berliner Kurse. Der Balken ist logarithmisch: gleich lange Stücke bedeuten das gleiche Vielfache.',
+    colMonth: 'Monat', colRate: 'Mark je $',
+    methodTitle: 'So wird gerechnet',
+    method1: 'Der alte Betrag wird zuerst zum damaligen Kurs in US-Dollar umgerechnet. Diese Dollar werden mit dem US-Verbraucherpreisindex auf heutige Dollar hochgerechnet und dann zum heutigen Kurs in die gewählte Währung getauscht.',
+    method2: 'Der Dollar ist die Brücke, weil er die ganze Zeit an Gold gebunden blieb und einen durchgehenden Preisindex seit 1913 hat. Das Ergebnis ist Kaufkraft, gemessen an amerikanischen Preisen, nicht an deutschen.',
+    method3: 'Für die Papiermark gibt es Kurse zu einzelnen Monaten. Die Monate dazwischen werden logarithmisch interpoliert und so gekennzeichnet. 1923 konnte die Mark in wenigen Tagen die Hälfte ihres Werts verlieren; jeder Monatswert ist darum nur ein Anhaltspunkt. Andere Währungen rechnen mit Jahresdurchschnitten.',
+    footer: 'Quelltext und Daten: <a href="https://github.com/Pheonix-Studio-cat/old-school-wechselkurs-rechner">GitHub</a>. MIT-Lizenz.',
+    totalLabel: (a, c, d) => `${a} ${c} von ${d} sind heute etwa`,
+    today: 'heute',
+    s1: 'Kurs damals', s2: 'Damals in US-Dollar', s3: 'US-Teuerung seither', s4: 'Heute in US-Dollar', s5: 'Kurs heute',
+    d1: (r, c, when) => `${r} ${c} = 1 US-Dollar, ${when}`,
+    d1inv: (r, c, when) => `1 ${c} = ${r} US-Dollar, ${when}`,
+    d3: (y, a, b, lbl) => `Verbraucherpreisindex ${a} im Jahr ${y}, ${b} im ${lbl}`,
+    d5: (r, code, date, live) => `1 US-Dollar = ${r} ${code}, EZB-Referenzkurs vom ${date}${live ? ' (eben abgerufen)' : ''}`,
+    chipSource: 'Quelle', chipInterp: 'interpoliert', chipYear: 'Jahresmittel', chipFixed: 'fest',
+    interpBetween: (a, b) => `zwischen den Kursen für ${a} und ${b}`,
+    errAmount: 'Bitte einen Betrag von null oder mehr eingeben.',
+    errNotYet: (from) => `Die Rentenmark wurde erst ab dem 15. November 1923 ausgegeben. Bitte ${from} oder später wählen.`,
+    srcPM: 'Papiermark', srcWorld: 'Andere Währungen, 1919–1923', srcCPI: 'US-Preise', srcFX: 'Heutige Kurse',
+    srcWorldText: 'Jahresdurchschnitte der täglichen New Yorker Kurse nach L. H. Officer, MeasuringWorth. Pfund:',
+    srcFXText: (d) => `EZB-Referenzkurse vom ${d}. Die Seite fragt nach neueren, wenn sie kann, und behält sonst diese.`,
+    words: ['', 'Tausend', 'Millionen', 'Milliarden', 'Billionen'], word1: ['', 'Tausend', 'Million', 'Milliarde', 'Billion'],
+    ex: ['100 Mark, Jan. 1919', '1 Billion Mark, Nov. 1923', '1 Rentenmark, Dez. 1923', '1 £, 1920', '1 Million Mark, Aug. 1923'],
+    nameOf: (c) => c.name.de, hintOf: (c) => c.hint?.de || '',
+  },
+};
+const LOCALE = { en: 'en-GB', de: 'de-CH' };
+const EXAMPLES = [
+  { amount: 100, mult: '1', currency: 'papiermark', year: 1919, month: 1 },
+  { amount: 1, mult: '1e12', currency: 'papiermark', year: 1923, month: 11 },
+  { amount: 1, mult: '1', currency: 'rentenmark', year: 1923, month: 12 },
+  { amount: 1, mult: '1', currency: 'gbp', year: 1920, month: 1 },
+  { amount: 1, mult: '1e6', currency: 'papiermark', year: 1923, month: 8 },
+];
+
+let lang = 'en';
+try { lang = localStorage.getItem('lang'); } catch { /* storage blocked */ }
+if (lang !== 'en' && lang !== 'de') lang = (navigator.language || '').toLowerCase().startsWith('de') ? 'de' : 'en';
+let fx = TODAY_FX; let fxLive = false;
+
+const $ = (id) => document.getElementById(id);
+const t = () => T[lang];
+const nf = (v, max = 2, min = 0) => new Intl.NumberFormat(LOCALE[lang], { maximumFractionDigits: max, minimumFractionDigits: min }).format(v);
+const sig = (v) => v >= 1000 ? nf(Math.round(v), 0) : nf(v, v >= 10 ? 2 : 4);
+const monthName = (m, style = 'long') => new Intl.DateTimeFormat(LOCALE[lang], { month: style, timeZone: 'UTC' }).format(new Date(Date.UTC(2000, m - 1, 1)));
+const ymLabel = (s, style = 'long') => { const [y, m] = s.split('-').map(Number); return `${monthName(m, style)} ${y}`; };
+const dateLabel = (iso) => new Intl.DateTimeFormat(LOCALE[lang], { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(new Date(iso + 'T00:00:00Z'));
+
+// "4.2 trillion" style words for very large amounts (short scale in English, long scale in German).
+function inWords(v) {
+  if (!(v >= 1e6)) return '';
+  const k = Math.min(4, Math.floor(Math.log10(v) / 3));
+  const n = v / 10 ** (3 * k);
+  return `= ${nf(n, 3)} ${(n === 1 ? t().word1 : t().words)[k]}`;
+}
+
+function fillSelects() {
+  const cur = $('currency'); const keep = cur.value || 'papiermark';
+  cur.innerHTML = '';
+  for (const g of ['german', 'world']) {
+    const og = document.createElement('optgroup'); og.label = t()[g];
+    for (const c of CURRENCIES.filter((c) => c.group === g)) og.append(new Option(t().nameOf(c), c.id));
+    cur.append(og);
+  }
+  cur.value = keep;
+  const yr = $('year'); const ky = yr.value || '1919'; yr.innerHTML = '';
+  for (const y of YEARS) yr.append(new Option(String(y), String(y)));
+  yr.value = ky;
+  const mo = $('month'); const km = mo.value || '1'; mo.innerHTML = '';
+  for (let m = 1; m <= 12; m++) mo.append(new Option(monthName(m), String(m)));
+  mo.value = km;
+  const tg = $('target'); const kt = tg.value || (lang === 'de' ? 'CHF' : 'EUR'); tg.innerHTML = '';
+  for (const x of TARGETS) tg.append(new Option(`${x.code} · ${x.name[lang]}`, x.code));
+  tg.value = kt;
+  const ex = $('examples'); ex.querySelectorAll('button').forEach((b) => b.remove());
+  EXAMPLES.forEach((e, i) => {
+    const b = document.createElement('button'); b.type = 'button'; b.textContent = t().ex[i]; b.id = `ex-${i}`;
+    b.addEventListener('click', () => {
+      $('amount').value = e.amount; $('mult').value = e.mult; $('currency').value = e.currency;
+      $('year').value = String(e.year); $('month').value = String(e.month); update(true);
+    });
+    ex.append(b);
+  });
+}
+
+function applyLang() {
+  document.documentElement.lang = lang;
+  for (const el of document.querySelectorAll('[data-i18n]')) { const v = t()[el.dataset.i18n]; if (typeof v === 'string') el.textContent = v; }
+  for (const el of document.querySelectorAll('[data-i18n-html]')) el.innerHTML = t()[el.dataset.i18nHtml];
+  for (const b of document.querySelectorAll('.lang button')) b.setAttribute('aria-pressed', String(b.dataset.lang === lang));
+  fillSelects(); renderLedger(); renderSources(); update(false);
+}
+
+function renderSources() {
+  const items = [
+    [t().srcPM, PAPERMARK_SOURCE],
+    [t().srcWorld, `${t().srcWorldText} ${currencyById('gbp').source}.`],
+    [t().srcCPI, `${CPI.source}; ${CPI.today.label}: ${CPI.today.value} (${CPI.today.source}).`],
+    [t().srcFX, t().srcFXText(dateLabel(fx.date))],
+  ];
+  $('sources').innerHTML = '';
+  for (const [k, v] of items) { const dt = document.createElement('dt'); dt.textContent = k; const dd = document.createElement('dd'); dd.textContent = v; $('sources').append(dt, dd); }
+}
+
+function renderLedger(selected) {
+  const body = $('ledger'); body.innerHTML = '';
+  const max = Math.log10(4.2e12); const min = Math.log10(4.2);
+  for (const p of PAPERMARK_PER_USD) {
+    const tr = document.createElement('tr'); if (p.ym === selected) tr.className = 'sel';
+    const w = ((Math.log10(p.rate) - min) / (max - min)) * 100;
+    tr.innerHTML = `<td>${ymLabel(p.ym, 'short')}</td><td class="rate">${sig(p.rate)}</td><td class="barcell"><div class="bar" style="width:${Math.max(1, w).toFixed(1)}%"></div></td>`;
+    body.append(tr);
+  }
+}
+
+function chip(kind) {
+  const map = { source: ['source', t().chipSource], interpolated: ['interp', t().chipInterp], year: ['year', t().chipYear], fixed: ['fixed', t().chipFixed] };
+  const [cls, txt] = map[kind]; return `<span class="chip ${cls}">${txt}</span>`;
+}
+
+function update(flash) {
+  const c = currencyById($('currency').value);
+  const usesMonth = !!(c.monthly || c.from);
+  $('month').disabled = !usesMonth;
+  $('currency-hint').textContent = t().hintOf(c) || (c.monthly ? '' : `${t().annual}.`);
+  $('currency-hint').hidden = !$('currency-hint').textContent;
+  const amount = parseFloat($('amount').value) * Number($('mult').value);
+  const year = Number($('year').value); const month = Number($('month').value);
+  const target = $('target').value;
+  const r = convert({ amount, currency: c.id, year, month, target, fx });
+  const err = $('error'); const steps = $('steps');
+  if (r.error) {
+    err.hidden = false;
+    err.textContent = r.error === 'amount' ? t().errAmount : t().errNotYet(ymLabel(r.from));
+    steps.innerHTML = ''; $('total-value').textContent = '—'; $('total-label').textContent = ''; $('total-words').textContent = '';
+    renderLedger(); return;
+  }
+  err.hidden = true;
+  const digits = TARGETS.find((x) => x.code === target).digits;
+  const when = usesMonth && c.monthly ? ymLabel(`${year}-${String(month).padStart(2, '0')}`) : (c.fixedPerUsd ? t().fixedRate : `${year}, ${t().annual}`);
+  const whenShort = c.monthly || c.from ? `${monthName(month)} ${year}` : String(year);
+  $('total-label').textContent = t().totalLabel(nf(amount, 2), t().nameOf(c), whenShort);
+  const tv = $('total-value');
+  tv.textContent = `${nf(r.result, r.result < 1 && digits ? 4 : digits, digits ? Math.min(2, digits) : 0)} ${target}`;
+  $('total-words').textContent = inWords(amount);
+  if (flash) { tv.classList.remove('flash'); void tv.offsetWidth; tv.classList.add('flash'); }
+  const kind = r.rate.kind === 'source' && r.rate.basis === 'year' ? 'year' : r.rate.kind;
+  const extra = r.rate.kind === 'interpolated' ? ` (${t().interpBetween(ymLabel(r.rate.between[0], 'short'), ymLabel(r.rate.between[1], 'short'))})` : '';
+  const rows = [
+    r.rate.rate < 1
+      ? [t().s1 + chip(kind), `$ ${nf(1 / r.rate.rate, 3)}`, t().d1inv(nf(1 / r.rate.rate, 3), t().nameOf(c), when) + extra]
+      : [t().s1 + chip(kind), sig(r.rate.rate), t().d1(sig(r.rate.rate), t().nameOf(c), when) + extra],
+    [t().s2, `$ ${nf(r.usdThen, r.usdThen < 1 ? 6 : 2)}`, ''],
+    [t().s3, `× ${nf(r.factor, 2)}`, t().d3(year, nf(r.cpiThen, 1), nf(CPI.today.value, 3), CPI.today.label)],
+    [t().s4, `$ ${nf(r.usdToday, r.usdToday < 1 ? 6 : 2)}`, ''],
+    [t().s5, `× ${nf(r.targetPerUsd, 4)}`, t().d5(nf(r.targetPerUsd, 4), target, dateLabel(fx.date), fxLive)],
+  ];
+  steps.innerHTML = rows.map(([w, n, d]) => `<li><span class="what">${w}</span><span class="num">${n}</span>${d ? `<span class="detail">${d}</span>` : ''}</li>`).join('');
+  const sel = c.monthly ? `${year}-${String(month).padStart(2, '0')}` : null;
+  renderLedger(r.rate.kind === 'source' ? sel : null);
+}
+
+// Guilloché rosette, the engraved pattern on banknotes. Drawn once per theme.
+function drawRosette() {
+  const cv = $('rosette'); const g = cv.getContext('2d'); const s = cv.width; const cx = s / 2;
+  g.clearRect(0, 0, s, s);
+  g.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--engrave').trim() || '#2f5d50';
+  g.lineWidth = 0.6;
+  for (let k = 0; k < 6; k++) {
+    const R = 120 - k * 14; const r = 18 + k * 3; const d = 30 - k * 2;
+    g.beginPath();
+    for (let i = 0; i <= 2000; i++) {
+      const a = (i / 2000) * Math.PI * 2 * 7;
+      const x = (R - r) * Math.cos(a) + d * Math.cos(((R - r) / r) * a);
+      const y = (R - r) * Math.sin(a) - d * Math.sin(((R - r) / r) * a);
+      i ? g.lineTo(cx + x * 0.95, cx + y * 0.95) : g.moveTo(cx + x * 0.95, cx + y * 0.95);
+    }
+    g.stroke();
+  }
+}
+
+// Fresher ECB rates when the network allows it; otherwise the dated rates in data.js stay.
+async function fetchLiveRates() {
+  try {
+    const ctl = new AbortController(); const timer = setTimeout(() => ctl.abort(), 5000);
+    const res = await fetch('https://api.frankfurter.dev/v1/latest?base=EUR&symbols=USD,CHF,GBP,JPY', { signal: ctl.signal });
+    clearTimeout(timer);
+    if (!res.ok) return;
+    const j = await res.json();
+    const ok = j && j.base === 'EUR' && /^\d{4}-\d{2}-\d{2}$/.test(j.date) && ['USD', 'CHF', 'GBP', 'JPY'].every((k) => typeof j.rates?.[k] === 'number' && j.rates[k] > 0);
+    if (!ok || j.date < TODAY_FX.date) return;
+    fx = { ...TODAY_FX, date: j.date, perEur: { EUR: 1, ...j.rates } }; fxLive = true;
+    renderSources(); update(false);
+  } catch { /* offline or blocked: keep the stored rates */ }
+}
+
+for (const id of ['amount', 'mult', 'currency', 'year', 'month', 'target']) $(id).addEventListener('input', () => update(true));
+$('slip').addEventListener('submit', (e) => e.preventDefault());
+for (const b of document.querySelectorAll('.lang button')) b.addEventListener('click', () => {
+  lang = b.dataset.lang; try { localStorage.setItem('lang', lang); } catch {} applyLang();
+});
+matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', drawRosette);
+new MutationObserver(drawRosette).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+applyLang(); drawRosette(); fetchLiveRates();
+window.__wechsel = { convert, get fx() { return fx; } };
+</script>
+</body>
+</html>
